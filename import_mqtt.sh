@@ -19,8 +19,8 @@ fi
 
 # Create file with import data
 read_all=`mosquitto_sub -h localhost -t 'data' -u $user -P $passwd -C 1 -W 10`
-read_unixtime=`echo $read_all | awk -F "\"*;\"*" '{print $3}'`
-nosec=`echo $read_unixtime | awk '{print substr($0,1,8)}'`
+read_unixtime=`echo $read_all | awk -F ";" '{print $3}'`
+nosec=`echo $read_all | awk -F ";" '{print $1";"$2";"substr($3,1,8)}'`
 if [ -z $read_unixtime ] ; then
 	echo '* No MQTT data, check connection to MQTT broker or ESP32'
 elif grep -q $nosec $path/backup.csv ; then

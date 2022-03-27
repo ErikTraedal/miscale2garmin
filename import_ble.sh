@@ -16,8 +16,8 @@ fi
 if [ -z `hcitool dev | awk 'NR>1 {print $2}'` ] ; then
 	echo '* No BLE device detected'
 else read_all=`python3 -B $path/scanner_ble.py | awk 'END{print}'`
-	 read_unixtime=`echo $read_all | awk -F "\"*;\"*" '{print $3}'`
-	 nosec=`echo $read_unixtime | awk '{print substr($0,1,8)}'`
+	 read_unixtime=`echo $read_all | awk -F ";" '{print $3}'`
+	 nosec=`echo $read_all | awk -F ";" '{print $1";"$2";"substr($3,1,8)}'`
 	if [ -z $read_unixtime ] ; then
 		echo '* No BLE data from scale or incomplete'
 	elif grep -q $nosec $path/backup.csv ; then
